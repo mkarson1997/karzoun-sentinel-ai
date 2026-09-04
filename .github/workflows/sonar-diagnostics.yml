@@ -1,0 +1,59 @@
+name: Sonar diagnostics
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query public SonarCloud vulnerability findings
+        shell: python
+        run: |
+          import json
+          import urllib.parse
+          import urllib.request
+
+          projects = [
+              "mkarson1997_karzoun-sentinel-ai",
+              "mkarson1997_karzoun-flowforge",
+          ]
+          for project in projects:
+              query = urllib.parse.urlencode(
+                  {
+                      "componentKeys": project,
+                      "resolved": "false",
+                      "types": "VULNERABILITY",
+                      "ps": "100",
+                  }
+              )
+              url = "https://sonarcloud.io/api/issues/search?" + query
+              print(f"\n=== {project} ===")
+              try:
+                  with urllib.request.urlopen(url, timeout=20) as response:
+                      payload = json.load(response)
+              except Exception as exc:
+                  print(f"SonarCloud query failed: {exc}")
+                  continue
+
+              issues = payload.get("issues", [])
+              print(f"open vulnerabilities: {len(issues)}")
+              for issue in issues:
+                  print(
+                      json.dumps(
+                          {
+                              "rule": issue.get("rule"),
+                              "severity": issue.get("severity"),
+                              "component": issue.get("component"),
+                              "line": issue.get("line"),
+                              "message": issue.get("message"),
+                              "cleanCodeAttribute": issue.get("cleanCodeAttribute"),
+                              "impacts": issue.get("impacts"),
+                          },
+                          ensure_ascii=False,
+                      )
+                  )
