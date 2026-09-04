@@ -32,7 +32,10 @@ def compare_reports(
 
     reasons: list[str] = []
     if score_drop > max_score_drop:
-        reasons.append(f"Suite score dropped by {score_drop:.3f}, limit is {max_score_drop:.3f}.")
+        reasons.append(
+            f"Suite score dropped by {score_drop:.3f}, "
+            f"limit is {max_score_drop:.3f}."
+        )
     if new_failed:
         reasons.append("New failing cases: " + ", ".join(new_failed))
 
@@ -50,8 +53,15 @@ def _case_statuses(report: dict[str, Any]) -> dict[str, bool]:
         raise ValueError("report.cases must be a list")
     statuses: dict[str, bool] = {}
     for item in cases:
-        if not isinstance(item, dict) or not isinstance(item.get("id"), str) or not isinstance(item.get("passed"), bool):
-            raise ValueError("Each report case must have string 'id' and boolean 'passed'")
+        valid_case = (
+            isinstance(item, dict)
+            and isinstance(item.get("id"), str)
+            and isinstance(item.get("passed"), bool)
+        )
+        if not valid_case:
+            raise ValueError(
+                "Each report case must have string 'id' and boolean 'passed'"
+            )
         statuses[item["id"]] = item["passed"]
     return statuses
 
