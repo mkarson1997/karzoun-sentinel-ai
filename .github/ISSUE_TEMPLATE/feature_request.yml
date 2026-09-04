@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose a focused evaluator, integration, benchmark, or developer-experience improvement
+title: "feat: "
+labels: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What engineering or evaluation problem should SentinelAI solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest useful behavior and public interface.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List observable outcomes that would make the feature complete.
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Security, privacy, and reproducibility considerations
+      description: Note provider, network, secret-handling, data, or determinism implications.
