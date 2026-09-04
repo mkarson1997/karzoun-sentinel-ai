@@ -1,6 +1,9 @@
 # Karzoun SentinelAI
 
 [![CI](https://github.com/mkarson1997/karzoun-sentinel-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/mkarson1997/karzoun-sentinel-ai/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/mkarson1997/karzoun-sentinel-ai/actions/workflows/codeql.yml/badge.svg)](https://github.com/mkarson1997/karzoun-sentinel-ai/actions/workflows/codeql.yml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=mkarson1997_karzoun-sentinel-ai&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mkarson1997_karzoun-sentinel-ai)
+[![Release](https://img.shields.io/github/v/release/mkarson1997/karzoun-sentinel-ai)](https://github.com/mkarson1997/karzoun-sentinel-ai/releases/latest)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
@@ -43,6 +46,18 @@ A dataset is newline-delimited JSON:
 ```json
 {"id":"order-status","prompt":"Where is order 42?","response":"Order 42 shipped on Tuesday from Ankara.","context":["Order 42 shipped on Tuesday from the Ankara warehouse."]}
 ```
+
+## Container image
+
+Versioned images are published to GitHub Container Registry together with releases:
+
+```bash
+docker run --rm -v "$PWD:/workspace" \
+  ghcr.io/mkarson1997/karzoun-sentinel-ai:0.1.0 \
+  --help
+```
+
+The image runs the `sentinelai` CLI as a non-root user. For private-package visibility, authenticate to `ghcr.io` before pulling; public package visibility can be enabled from the package settings.
 
 ## Python API
 
@@ -118,6 +133,9 @@ See [`docs/architecture.md`](docs/architecture.md) for design boundaries and eva
 - Ruff linting
 - Pytest test suite
 - Python 3.11, 3.12, and 3.13 CI matrix
+- SonarQube Cloud quality gate and GitHub CodeQL security analysis
+- Versioned GitHub Releases and GHCR container packaging
+- Dependency update automation with Dependabot
 
 ## Roadmap
 
@@ -132,6 +150,14 @@ The next milestones add model execution and deeper evaluation without coupling t
 7. Custom rubric DSL
 
 Full plan: [`ROADMAP.md`](ROADMAP.md).
+
+## Project metadata
+
+- Releases: [`CHANGELOG.md`](CHANGELOG.md) and [GitHub Releases](https://github.com/mkarson1997/karzoun-sentinel-ai/releases)
+- Citation: [`CITATION.cff`](CITATION.cff)
+- Attribution: [`NOTICE`](NOTICE)
+- Security policy: [`SECURITY.md`](SECURITY.md)
+- Architecture: [`docs/architecture.md`](docs/architecture.md)
 
 ## Security
 
