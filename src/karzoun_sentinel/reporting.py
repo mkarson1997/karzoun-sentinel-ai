@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from .models import CaseResult, Evaluation, Finding, SuiteResult
+from .safe_paths import resolve_output_path
 
 
 def suite_to_dict(result: SuiteResult) -> dict[str, Any]:
@@ -15,13 +16,19 @@ def suite_to_dict(result: SuiteResult) -> dict[str, Any]:
     }
 
 
-def save_json(result: SuiteResult, path: str | Path) -> None:
+def save_json(
+    result: SuiteResult,
+    path: str | Path,
+    *,
+    root: str | Path | None = None,
+) -> None:
     payload = json.dumps(
         suite_to_dict(result),
         indent=2,
         ensure_ascii=False,
     )
-    Path(path).write_text(payload + "\n", encoding="utf-8")
+    target = resolve_output_path(path, root=root)
+    target.write_text(payload + "\n", encoding="utf-8")
 
 
 def render_markdown(result: SuiteResult) -> str:

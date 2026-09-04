@@ -3,12 +3,12 @@ from __future__ import annotations
 import argparse
 import json
 from collections.abc import Sequence
-from pathlib import Path
 
 from .dataset import load_jsonl
 from .regression import compare_reports
 from .reporting import render_markdown, save_json, suite_to_dict
 from .runner import EvaluationSuite
+from .safe_paths import resolve_input_path, resolve_output_path
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -46,15 +46,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.json_path:
             save_json(result, args.json_path)
         if args.markdown_path:
-            Path(args.markdown_path).write_text(
-                render_markdown(result),
-                encoding="utf-8",
-            )
+            markdown_path = resolve_output_path(args.markdown_path)
+            markdown_path.write_text(render_markdown(result), encoding="utf-8")
         print(json.dumps(payload, indent=2, ensure_ascii=False))
         return 0 if result.passed or args.allow_failures else 1
 
-    baseline = json.loads(Path(args.baseline).read_text(encoding="utf-8"))
-    current = json.loads(Path(args.current).read_text(encoding="utf-8"))
+    baseline_path = resolve_input_path(args.baseline)
+    current_path = resolve_input_path(args.current)
+    baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+    current = json.loads(current_path.read_text(encoding="utf-8"))
     comparison = compare_reports(
         baseline,
         current,

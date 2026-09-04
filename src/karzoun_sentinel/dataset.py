@@ -5,11 +5,16 @@ from pathlib import Path
 from typing import Any
 
 from .models import EvaluationCase
+from .safe_paths import resolve_input_path
 
 
-def load_jsonl(path: str | Path) -> list[EvaluationCase]:
+def load_jsonl(
+    path: str | Path,
+    *,
+    root: str | Path | None = None,
+) -> list[EvaluationCase]:
     cases: list[EvaluationCase] = []
-    source = Path(path)
+    source = resolve_input_path(path, root=root)
     lines = source.read_text(encoding="utf-8").splitlines()
     for line_number, raw_line in enumerate(lines, start=1):
         line = raw_line.strip()
