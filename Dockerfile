@@ -7,19 +7,16 @@ LABEL org.opencontainers.image.title="Karzoun SentinelAI" \
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PYTHONPATH=/workspace/src
 
 WORKDIR /workspace
 
-COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
-
-RUN python -m pip install --no-cache-dir --no-deps .
 
 RUN useradd --create-home --uid 10001 sentinelai \
     && chown -R sentinelai:sentinelai /workspace
 
 USER sentinelai
 
-ENTRYPOINT ["sentinelai"]
+ENTRYPOINT ["python", "-m", "karzoun_sentinel.cli"]
 CMD ["--help"]
