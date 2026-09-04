@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+title: Karzoun SentinelAI
+message: "If you use Karzoun SentinelAI in research, evaluation, benchmarking, or engineering work, please cite this software."
+type: software
+authors:
+  - family-names: Karzoun
+    given-names: Mahmoud
+version: 0.1.0
+date-released: 2026-09-04
+license: Apache-2.0
+repository-code: "https://github.com/mkarson1997/karzoun-sentinel-ai"
+url: "https://github.com/mkarson1997/karzoun-sentinel-ai"
+keywords:
+  - LLM evaluation
+  - AI evaluation
+  - prompt injection
+  - AI security
+  - regression testing
+  - groundedness
+  - red teaming
