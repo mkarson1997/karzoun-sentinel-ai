@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "karzoun-sentinel-ai"
+version = "0.1.0"
+description = "Open-source evaluation and regression testing for LLM applications and AI agents"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Mahmoud Karzoun" }]
+keywords = ["llm", "ai", "evaluation", "security", "prompt-injection", "regression-testing"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "License :: OSI Approved :: Apache Software License",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.17,<2",
+  "pytest>=8.4,<9",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+sentinelai = "karzoun_sentinel.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/mkarson1997/karzoun-sentinel-ai"
+Repository = "https://github.com/mkarson1997/karzoun-sentinel-ai"
+Issues = "https://github.com/mkarson1997/karzoun-sentinel-ai/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/karzoun_sentinel"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["karzoun_sentinel"]
+mypy_path = "src"
