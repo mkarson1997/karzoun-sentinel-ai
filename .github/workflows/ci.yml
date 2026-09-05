@@ -33,3 +33,20 @@ jobs:
         run: uv run --locked --no-sync --no-build mypy src
       - name: Tests
         run: uv run --locked --no-sync --no-build pytest
+
+  ci-gate:
+    name: CI Gate
+    if: ${{ always() }}
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require successful verification matrix
+        env:
+          VERIFY_RESULT: ${{ needs.verify.result }}
+        run: |
+          if [ "$VERIFY_RESULT" != "success" ]; then
+            echo "Verification matrix result: $VERIFY_RESULT"
+            exit 1
+          fi
+          echo "Verification matrix passed."
