@@ -6,11 +6,10 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: read
-
 jobs:
   verify:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -33,3 +32,19 @@ jobs:
         run: uv run --locked --no-sync --no-build mypy src
       - name: Tests
         run: uv run --locked --no-sync --no-build pytest
+
+  ci-gate:
+    name: CI Gate
+    if: ${{ always() }}
+    needs: verify
+    permissions: {}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Confirm successful verification matrix
+        if: ${{ needs.verify.result == 'success' }}
+        run: echo "Verification matrix passed."
+
+      - name: Fail when verification did not succeed
+        if: ${{ needs.verify.result != 'success' }}
+        run: exit 1
