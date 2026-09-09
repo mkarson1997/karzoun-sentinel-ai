@@ -23,6 +23,21 @@ The core is intentionally **offline-first and provider-neutral**. You can evalua
 
 SentinelAI does **not** claim that regular expressions solve prompt injection or that lexical overlap solves hallucination detection. Those evaluators are transparent deterministic baselines designed for repeatable regression testing. Semantic and model-assisted evaluators are on the roadmap.
 
+## Engineering proof points
+
+| Area | What the repository demonstrates |
+| --- | --- |
+| AI evaluation architecture | Provider-neutral cases and composable evaluators separated from model execution. |
+| Deterministic regression | Repeatable recorded-output evaluation suitable for local and CI use without API keys. |
+| Security-minded data handling | Adversarial prompts/responses are treated as untrusted data, and credential-shaped findings redact matched values. |
+| Honest evaluator semantics | Prompt-injection and groundedness logic are explicitly documented as heuristic baselines rather than universal detectors. |
+| Parallel execution | Bounded `ThreadPoolExecutor` case evaluation without making completion order part of report semantics. |
+| Regression gates | Baseline/current comparison fails on configured score drops and newly failing cases. |
+| Reporting | Stable JSON and human-readable Markdown artifacts from a normalized result model. |
+| Verification | Ruff, Mypy, Pytest, Python 3.11/3.12/3.13 CI, CodeQL and SonarQube Cloud. |
+| Delivery | Versioned GitHub Releases plus a non-root GHCR container. |
+| Supply-chain hygiene | GitHub Actions used by CI, CodeQL and packaging are pinned to reviewed immutable commits. |
+
 ## Quick start
 
 ```bash
@@ -115,7 +130,7 @@ Prompt + Response + Context
  JSON / Markdown     Regression gate
 ```
 
-See [`docs/architecture.md`](docs/architecture.md) for design boundaries and evaluator semantics.
+See [`docs/architecture.md`](docs/architecture.md) for the trust boundary, design invariants, evaluator semantics, parallelism model and explicit non-claims.
 
 ## Current v0.1 capabilities
 
@@ -136,6 +151,17 @@ See [`docs/architecture.md`](docs/architecture.md) for design boundaries and eva
 - SonarQube Cloud quality gate and GitHub CodeQL security analysis
 - Versioned GitHub Releases and GHCR container packaging
 - Dependency update automation with Dependabot
+
+## Security and delivery controls
+
+- CI verifies Python 3.11, 3.12 and 3.13 with Ruff, Mypy and Pytest behind an aggregate `CI Gate`
+- CodeQL runs the Python security-extended query suite
+- SonarQube Cloud provides an additional quality gate on pull requests
+- third-party GitHub Actions used by CI, security analysis and release packaging are pinned to reviewed immutable commit SHAs
+- verification dependencies are synchronized from the lockfile with `uv`
+- evaluation inputs remain offline data in v0.1 rather than executable model/tool instructions
+- credential-shaped findings redact the matched value before reporting
+- the published container runs the CLI as a non-root user
 
 ## Roadmap
 
